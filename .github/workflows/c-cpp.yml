@@ -1,4 +1,4 @@
-name: C/C++ CI
+name: PlatformIO CI
 
 on:
   push:
@@ -8,16 +8,21 @@ on:
 
 jobs:
   build:
-
-    runs-on: ubuntu-latest
+    runs-on: windows-latest  # Run the CI on Windows
 
     steps:
-    - uses: actions/checkout@v4
-    - name: configure
-      run: ./configure
-    - name: make
-      run: make
-    - name: make check
-      run: make check
-    - name: make distcheck
-      run: make distcheck
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.x'
+
+    - name: Install PlatformIO
+      run: |
+        pip install -U platformio
+
+    - name: Build PlatformIO Project
+      run: |
+        platformio run
